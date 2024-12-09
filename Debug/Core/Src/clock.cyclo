@@ -1,0 +1,6 @@
+../Core/Src/clock.c:28:6:displayTime	1
+../Core/Src/clock.c:38:6:ChangeValue	22
+../Core/Src/clock.c:86:6:ApplyChange	1
+../Core/Src/clock.c:96:6:ChangeAlarm	5
+../Core/Src/clock.c:112:6:fsm	25
+../Core/Src/clock.c:196:5:UpdateTime	32
