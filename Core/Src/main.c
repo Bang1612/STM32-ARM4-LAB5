@@ -79,6 +79,8 @@ int main(void)
   /* USER CODE BEGIN 1 */
 int status =0;
 int sta=1;
+char* update_request[6] = {"Seconds?", "Minutes?", "Hours?", "Days?", "Months?", "Years?"};
+uint8_t response[2] = {0};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -112,25 +114,34 @@ int sta=1;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-//	  while(!flag_timer2);
-//	  flag_timer2 = 0;
-//	  button_Scan();
-//	  test_LedDebug();
-//	  ds3231_ReadTime();
-//	  test_Uart();
-	  if(dataReady && button_count[0] == 1){
-		  BufferReading();
-	  }
 	  if (flag_timer2){
-		  button_Scan();
-		  ds3231_ReadTime();
-		  fsm(status);
-	  }
-	  if(button_count[1]==1){
-		  status++;
-		  if(status >3) status =0;
-	  }
+	  		  setTimer2(50);
+	  		  button_Scan();
+
+	  			  fsm(status);
+	  			if (button_count[1] == 1) {
+	  				lcd_Clear(BLACK);
+	  				status++;
+	  				if (status > UART_UPDATING)
+	  					status = NORMAL;
+
+	  				if (status == UART_UPDATING) {
+	  					setTimer5(10000);
+	  				}
+	  				counter = 0;
+	  				setTimer4(250);
+	  				sta = 1;
+	  			}
+	  			if (dataReady && button_count[0] == 1) {
+	  				BufferReading();
+	  			}
+	  	  }
+
+    /* USER CODE END WHILE */
+
+
+
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -189,6 +200,7 @@ void system_init(){
 	  led7_init();
 	  button_init();
 	  lcd_init();
+//	  ds3231_init();
 	  uart_init_rs232();
 	  setTimer2(50);
 }
@@ -221,7 +233,99 @@ void test_Uart(){
 		uart_Rs232SendString("\n");
 	}
 }
-
+void Flashing_cal(int sta){
+	lcd_Fill(0, 50, 200, 160, BLACK);
+	switch (counter) {
+	case 0:
+		lcd_ShowIntNum(70, 100, ds3231_hours, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, ds3231_min, 2, GREEN, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(20, 130, ds3231_day, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(70, 130, ds3231_date, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(110, 130, ds3231_month, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
+		break;
+	case 1:
+		lcd_ShowIntNum(70, 100, ds3231_hours, 2, GREEN, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(110, 100, cal_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(20, 130, ds3231_day, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(70, 130, ds3231_date, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(110, 130, ds3231_month, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
+		break;
+	case 2:
+		if (sta)
+			lcd_ShowIntNum(70, 100, cal_hour, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, cal_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(20, 130, ds3231_day, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(70, 130, ds3231_date, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(110, 130, ds3231_month, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
+		break;
+	case 3:
+		lcd_ShowIntNum(70, 100, cal_hour, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, cal_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		if (sta) {
+			lcd_ShowIntNum(20, 130, cal_day, 2, YELLOW, BLACK, 24);
+			lcd_ShowIntNum(70, 130, cal_date, 2, YELLOW, BLACK, 24);
+		}
+		lcd_ShowIntNum(110, 130, ds3231_month, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
+		break;
+	case 4:
+		lcd_ShowIntNum(70, 100, cal_hour, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, cal_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(20, 130, cal_day, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(70, 130, cal_date, 2, YELLOW, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(110, 130, cal_month, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
+		break;
+	case 5:
+		lcd_ShowIntNum(70, 100, cal_hour, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, cal_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, cal_sec, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(20, 130, cal_day, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(70, 130, cal_date, 2, YELLOW, BLACK, 24);
+		lcd_ShowIntNum(110, 130, cal_month, 2, YELLOW, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(150, 130, cal_year, 2, YELLOW, BLACK, 24);
+		break;
+	default:
+		break;
+	}
+}
+void Flashing_alarm(int sta){
+	lcd_Fill(0, 50, 200, 160, BLACK);
+	switch (counter) {
+	case 0:
+		lcd_ShowIntNum(70, 100, al_hours, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, al_min, 2, GREEN, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(150, 100, al_sec, 2, GREEN, BLACK, 24);
+		break;
+	case 1:
+		lcd_ShowIntNum(70, 100, al_hours, 2, GREEN, BLACK, 24);
+		if (sta)
+			lcd_ShowIntNum(110, 100, al_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, al_sec, 2, GREEN, BLACK, 24);
+		break;
+	case 2:
+		if (sta)
+			lcd_ShowIntNum(70, 100, al_hours, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(110, 100, al_min, 2, GREEN, BLACK, 24);
+		lcd_ShowIntNum(150, 100, al_sec, 2, GREEN, BLACK, 24);
+		break;
+	default:
+		break;
+	}
+}
 
 
 /* USER CODE END 4 */

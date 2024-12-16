@@ -1,7 +1,9 @@
-../Core/Src/main.c:77:5:main	6
-../Core/Src/main.c:143:6:SystemClock_Config	3
-../Core/Src/main.c:184:6:system_init	1
-../Core/Src/main.c:198:6:test_LedDebug	2
-../Core/Src/main.c:205:6:test_button	3
-../Core/Src/main.c:214:6:test_Uart	2
-../Core/Src/main.c:233:6:Error_Handler	1
+../Core/Src/main.c:77:5:main	9
+../Core/Src/main.c:200:6:SystemClock_Config	3
+../Core/Src/main.c:241:6:system_init	1
+../Core/Src/main.c:256:6:test_LedDebug	2
+../Core/Src/main.c:263:6:test_button	3
+../Core/Src/main.c:272:6:test_Uart	2
+../Core/Src/main.c:282:6:Flashing_cal	13
+../Core/Src/main.c:350:6:Flashing_alarm	8
+../Core/Src/main.c:383:6:Error_Handler	1

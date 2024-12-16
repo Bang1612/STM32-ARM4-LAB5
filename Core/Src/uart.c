@@ -38,7 +38,7 @@ void BufferReading(){
 	while(pointer != head){
 		uint8_t data = RingBuffer[pointer];
 		pointer=(pointer+1) % BUFFER_SIZE;
-		uart_Rs232SendNum(data);
+		uart_Rs232SendNum(data-48);
 		uart_Rs232SendString("	");
 	}
 	dataReady=0;

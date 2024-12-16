@@ -9,9 +9,9 @@
 #define INC_CLOCK_H_
 
 #define NORMAL 0
-#define CALIBRATE 1
-#define SET_ALARM 2
-#define UART_UPDATING 3
+#define CALIBRATE 11
+#define SET_ALARM 15
+#define UART_UPDATING 1
 
 extern int counter;
 #include "lcd.h"
@@ -33,4 +33,6 @@ extern uint8_t al_min;
 extern uint8_t al_sec;
 
 void fsm(uint16_t status);
+void CalibrateInit();
+void UpdateTime(int counter, uint8_t *response);
 #endif /* INC_CLOCK_H_ */

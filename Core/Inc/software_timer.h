@@ -13,6 +13,7 @@
 extern uint16_t flag_timer2;
 extern uint16_t flag_timer3;
 extern uint16_t flag_timer4;
+extern uint16_t flag_timer5;
 
 void timer_init();
 void setTimer2(uint16_t duration);
